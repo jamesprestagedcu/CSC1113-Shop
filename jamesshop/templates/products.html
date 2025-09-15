@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<ul>
+    {% for p in products %}
+        <li>{{ p.name }} - €{{p.price}} - {{p.description}}</li>  
+        <a href="{% url 'individual_product' prodid=p.id %}">
+            <img src="{{p.product_image.url}}" />
+        </a>
+    {% endfor %}
+</ul>
+{% endblock %}
