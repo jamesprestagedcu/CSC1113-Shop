@@ -1,8 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %}Hello world{% endblock %}
-
+{% block title %}Welcome to James' Shop{% endblock %}
 
 {% block content %}
-	<p>Hello world</p>
+    {% if user.is_authenticated %}
+        <a class="nav-link" href="#">Welcome, {{user.username}}</a>
+        <p>You are logged in - ready to shop?</p>
+        <a href="{% url 'all_products' %}" class="btn btn-primary">Enter Shop</a>
+        <a href="/logout/" class="btn btn-primary">Logout</a>
+    {% else %}
+        <p>Welcome to James' Shop - please login or register</p>
+        <a href="/login/" class="btn btn-primary">Login</a>
+        <a href="/register/" class="btn btn-primary">Register</a>
+    {% endif %}
 {% endblock %}
