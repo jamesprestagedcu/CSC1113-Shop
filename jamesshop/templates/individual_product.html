@@ -4,14 +4,18 @@
 
 
 {% block content %}
-{% if added %}
+<!-- Come back to this, add to basket functionality. constant basket view on products and individual page -->
+<!-- {% if added %} 
     <h1> Added to basket</h1>
-{% endif %}
-<h1>Name: {{product.name}} - €{{product.price}}</h1>
+{% endif %} -->
+
+<p>Name: {{product.name}} - €{{product.price}}</p>
 <img src="{{product.product_image.url}}" />
 <p>
     {{product.description}}
     <a href="/addbasket/{{product.id}}" class="btn btn-primary">Buy €{{product.price}}</a>
 </p>
+
+<a href="/addbasket/{{product.id}}/" class="btn btn-primary">Add to basket</a>
 
 {% endblock %}
