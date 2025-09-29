@@ -44,6 +44,57 @@ def add_to_basket(request, prodid):
         sbi.save()
     return redirect("/products")
 
+@login_required
+def show_basket(request):
+    # get the user object
+    # does a shopping basket exist ? -> your basket is empty
+    # load all shopping basket items
+    # display on page 
+    user = request.user
+    basket = Basket.objects.filter(user_id=user, is_active=True).first()
+    if basket is None:
+        #TODO: Show basket empty
+        return render(request, 'basket.html', {'empty':True})
+    else:
+        sbi = BasketItem.objects.filter(basket_id=basket)
+        # is this list empty ? 
+        if sbi.exists():
+            # normal flow
+            return render(request, 'basket.html', {'basket':basket, 'sbi':sbi})
+        else:
+            return render(request, 'basket.html', {'empty':True})
+
+
+@login_required
+def add_to_basket(request, prodid):
+    user = request.user
+    product = get_object_or_404(Product, id=prodid)
+
+    basket, created = Basket.objects.get_or_create(user_id=user, is_active=True)
+
+    sbi = BasketItem.objects.filter(basket_id=basket, product_id=product).first()
+
+    if sbi is None:
+        sbi = BasketItem.objects.create(basket_id=basket, product_id=product, quantity=1)
+    else:
+        sbi.quantity += 1
+        sbi.save()
+
+    return redirect('all_products')
+
+@login_required
+def remove_item(request,sbi):
+    basketitem = BasketItem.objects.get(id=sbi)
+    if basketitem is None:
+        return redirect("/basket") # if error redirect to shopping basket
+    else:
+        if basketitem.quantity > 1:
+            basketitem.quantity = basketitem.quantity-1
+            basketitem.save() # save our changes to the db
+        else:
+            basketitem.delete() # delete the basket item
+    return redirect("/basket")
+
 class UserSignupView(CreateView):
     model = User
     form_class = UserSignupForm
