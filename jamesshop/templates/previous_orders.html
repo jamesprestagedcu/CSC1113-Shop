@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Order history{% endblock %}
+
+{% block content %}
+<style>
+    .orders-wrap {
+        max-width: 900px;
+        margin: 2rem auto;
+        text-align: center;
+    }
+    .orders-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+    }
+    .orders-table th, .orders-table td {
+        border: 1px solid #e6e6e6;
+        padding: 0.6rem 0.8rem;
+    }
+    .orders-table th {
+        background: #f5f5f5;
+        font-weight: 700;
+    }
+    .orders-table td {
+        text-align: left;
+    }
+    .orders-table td.numeric {
+        text-align: right;
+        white-space: nowrap;
+    }
+    .no-orders {
+        margin-top: 1.25rem;
+        color: #555;
+    }
+    .back-link {
+        display: inline-block;
+        margin-top: 1rem;
+        text-decoration: none;
+        color: #007bff;
+    }
+</style>
+
+<div class="orders-wrap">
+    <h1>Order history</h1>
+
+    {% if not orders %}
+        <p class="no-orders">You have no previous orders.</p>
+    {% else %}
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Ordered on</th>
+                    <th>Shipping to</th>
+                    <th class="numeric">Total price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ord in orders %}
+                    <tr>
+                        <td>{{ ord.id }}</td>
+                        <td>{{ ord.date_ordered }}</td>
+                        <td>{{ ord.shipping_addr }}</td>
+                        <td class="numeric">€{{ ord.total_price }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <a href="{% url 'index' %}" class="back-link">Back to home</a>
+</div>
+{% endblock %}

@@ -1,12 +1,59 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<ul>
+<style>
+    .products-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+    }
+    .product-card {
+        border: 1px solid #ddd;
+        padding: 0.75rem;
+        width: 220px;
+        box-sizing: border-box;
+        text-align: center;
+        background: #fff;
+        border-radius: 6px;
+    }
+    .product-card h3 {
+        margin: 0.4rem 0;
+        font-size: 1rem;
+    }
+    .product-card p {
+        margin: 0.25rem 0;
+        font-size: 0.9rem;
+    }
+    .product-card img {
+        max-width: 200px;
+        max-height: 150px;
+        width: auto;
+        height: auto;
+        object-fit: cover;
+        display: block;
+        margin: 0.4rem auto;
+    }
+    .add-basket-link {
+        display: inline-block;
+        margin-top: 0.5rem;
+        text-decoration: none;
+    }
+</style>
+
+<div class="products-grid">
     {% for p in products %}
-        <li>{{ p.name }} - €{{p.price}} - {{p.description}}</li>  
-        <a href="{% url 'individual_product' prodid=p.id %}">
-            <img src="{{p.product_image.url}}" />
-        </a>
+        <div class="product-card">
+            <h3>{{ p.name }}</h3>
+            {% if p.product_image %}
+                <a href="{% url 'individual_product' prodid=p.id %}">
+                    <img src="{{ p.product_image.url }}" alt="{{ p.name }}">
+                </a>
+            {% endif %}
+            <p>€{{ p.price }}</p>
+            <p>{{ p.description }}</p>
+            <a class="add-basket-link" href="{% url 'add_basket' prodid=p.id %}">Add to basket</a>
+        </div>
     {% endfor %}
-</ul>
+</div>
 {% endblock %}

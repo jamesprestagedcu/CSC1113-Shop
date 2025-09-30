@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Complete{% endblock %}
+
+{% block content %}
+    <style>
+        .order-wrap {
+            max-width: 900px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+        .products-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        .product-card {
+            border: 1px solid #ddd;
+            padding: 0.6rem;
+            width: 240px;
+            box-sizing: border-box;
+            text-align: center;
+            background: #fff;
+            border-radius: 6px;
+        }
+        .product-card h3 {
+            margin: 0.4rem 0;
+            font-size: 1rem;
+        }
+        .product-card p {
+            margin: 0.25rem 0;
+            font-size: 0.9rem;
+        }
+        .product-card img {
+            max-width: 200px;
+            max-height: 130px;
+            width: auto;
+            height: auto;
+            object-fit: cover;
+            display: block;
+            margin: 0.4rem auto;
+        }
+        .order-summary {
+            margin-top: 1rem;
+            font-weight: 700;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 0.9rem;
+            background: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+    </style>
+
+    <div class="order-wrap">
+        <h1>Order Complete</h1>
+        {% if sbi %}
+            <div class="products-grid">
+                {% for item in sbi %}
+                    <div class="product-card">
+                        <h3>{{ item.product_id.name }}</h3>
+                        {% if item.product_id.product_image %}
+                            <img src="{{ item.product_id.product_image.url }}" alt="{{ item.product_id.name }}">
+                        {% endif %}
+                        <p>Qty: {{ item.quantity }}</p>
+                        <p>Unit: €{{ item.product_id.price }}</p>
+                        <p>Total: €{{ item.item_price }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="order-summary">
+            <p>Order total: €{{ order.total_price }}</p>
+        </div>
+
+        <p style="margin-top:1rem;">
+            <a href="{% url 'all_products' %}" class="btn">Continue shopping</a>
+        </p>
+    </div>
+{% endblock %}

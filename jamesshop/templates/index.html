@@ -4,13 +4,14 @@
 
 {% block content %}
     {% if user.is_authenticated %}
-        <a class="nav-link" href="#">Welcome, {{user.username}}</a>
-        <p>You are logged in - ready to shop?</p>
-        <a href="{% url 'all_products' %}" class="btn btn-primary">Enter Shop</a>
-        <a href="/logout/" class="btn btn-primary">Logout</a>
+    <div style="max-width:700px; margin:2rem auto; text-align:center;">
+        <h1>Welcome to the shop, {{user.username}}!</h1>
+    </div>
     {% else %}
+    <div style="max-width:700px; margin:2rem auto; text-align:center;">
         <p>Welcome to James' Shop - please login or register</p>
         <a href="/login/" class="btn btn-primary">Login</a>
         <a href="/register/" class="btn btn-primary">Register</a>
+    </div>
     {% endif %}
 {% endblock %}

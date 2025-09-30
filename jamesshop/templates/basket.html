@@ -2,27 +2,92 @@
 
 {% block title %}Basket{% endblock %}
 
-
 {% block content %}
+<style>
+    .products-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+    }
+    .product-card {
+        border: 1px solid #ddd;
+        padding: 0.75rem;
+        width: 260px;
+        box-sizing: border-box;
+        text-align: center;
+        background: #fff;
+        border-radius: 6px;
+    }
+    .product-card h3 {
+        margin: 0.4rem 0;
+        font-size: 1rem;
+    }
+    .product-card p {
+        margin: 0.25rem 0;
+        font-size: 0.9rem;
+    }
+    .product-card img {
+        max-width: 220px;
+        max-height: 140px;
+        width: auto;
+        height: auto;
+        object-fit: cover;
+        display: block;
+        margin: 0.4rem auto;
+    }
+    .item-meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+        align-items: center;
+        margin-top: 0.5rem;
+    }
+    .item-actions a {
+        margin-left: 0.5rem;
+        text-decoration: none;
+    }
+</style>
 
-{% if empty %}
-    <p>Your shopping basket is empty</p>
+{% if not sbi %}
+    <p style="text-align:center; margin-top:1rem;">
+        Your shopping basket is empty
+    </p>
 {% else %}
-    <table>
-        <tbody>
-            {% for item in sbi %}
-            <tr>
-                <td>{{item.product_id.name}} - {{item.product_id.description }}</td>
-                <td><img src="{{item.product_id.product_image.url}}" /> </td>
-                <td>{{item.quantity}}</td>
-                <td>{{ item.item_price }}</td>
-                <td><a href="/removeitem/{{item.id}}">Remove</a> </td>
-            </tr>
-                
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="products-grid">
+        {% for item in sbi %}
+            <div class="product-card">
+                <h3>{{ item.product_id.name }}</h3>
+
+                {% if item.product_id.product_image %}
+                    <img src="{{ item.product_id.product_image.url }}" alt="{{ item.product_id.name }}">
+                {% endif %}
+
+                <p>{{ item.product_id.description }}</p>
+
+                <div class="item-meta">
+                    <span>Qty: {{ item.quantity }}</span>
+                    <span>Unit: €{{ item.product_id.price }}</span>
+                </div>
+
+                <p>
+                    Total: €
+                    {% if item.item_price %}
+                        {{ item.item_price }}
+                    {% else %}
+                        {{ item.product_id.price|floatformat:2|floatformat:2 }}
+                    {% endif %}
+                </p>
+
+                <div class="item-actions">
+                    <a href="{% url 'individual_product' prodid=item.product_id.id %}">View</a>
+                    <a href="{% url 'remove_item' sbi=item.id %}">Remove</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <p style="text-align:center; margin-top:1rem;">
+        <a href="{% url 'order' %}" class="btn btn-primary">Place Order</a>
+    </p>
 {% endif %}
-
-
 {% endblock %}
